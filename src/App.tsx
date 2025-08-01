@@ -17,7 +17,7 @@ const bots: BotData[] = [
     platform: 'whatsapp',
     status: 'Online',
     description: '‎',
-    link: 'https://wa.me/6281273118423',
+    link: 'https://api.whatsapp.com/send?phone=6285194718404&text=.menu',
   },
   {
     id: '2',
