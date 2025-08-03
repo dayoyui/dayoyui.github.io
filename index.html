@@ -1,52 +1,60 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- ⛔ Prevent flash: apply dark mode BEFORE anything else -->
+    <!-- 🛡️ Anti-Flicker DARK MODE: Eksekusi sebelum CSS diload -->
     <script>
       (function () {
         try {
           const theme = localStorage.getItem("theme");
-          if (theme === "dark") {
+          const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          const isDark = theme === "dark" || (!theme && prefersDark);
+          if (isDark) {
             document.documentElement.classList.add("dark");
+          } else {
+            document.documentElement.classList.remove("dark");
           }
-        } catch (e) {}
+        } catch (_) {}
       })();
     </script>
 
+    <!-- ✅ Tailwind safe-fallback background color to avoid flash -->
+    <style>
+      html {
+        background-color: #fbfaff;
+      }
+      html.dark {
+        background-color: #181827;
+      }
+    </style>
+
+    <!-- 🌐 Metadata dan OG tags -->
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Kinda" />
+    <meta name="keywords" content="bots, WhatsApp, Telegram, Discord" />
     <meta property="og:title" content="Kinda" />
     <meta property="og:description" content="Your Toram Online Assistant." />
     <meta property="og:image" content="https://ucarecdn.com/72e39c89-791c-4730-b05a-848110bc99d1/-/preview/1000x1000/" />
     <meta property="og:url" content="https://kinda.icu" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Kinda" />
-    <meta name="keywords" content="bots, WhatsApp, Telegram, Discord" />
 
-    <!-- Font & Favicon -->
+    <!-- 🧠 Fonts + Favicon -->
     <link rel="icon" href="/assets/favicon-DGT7ndrs.ico" type="image/x-icon" />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
       rel="stylesheet"
     />
 
+    <!-- 🔖 Title -->
     <title>Kinda</title>
-
-    <!-- Optional: Prevent white background while React loads -->
-    <style>
-      html:not(.dark) body {
-        background-color: #fbfaff;
-      }
-      html.dark body {
-        background-color: #181827;
-      }
-    </style>
-    <script type="module" crossorigin src="/assets/index-CA3o0g63.js"></script>
+    <script type="module" crossorigin src="/assets/index-BMs7A8Pe.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-C2uWNAtZ.css">
   </head>
 
-  <body>
+  <body class="text-gray-900 dark:text-[#e6e0f9] transition-colors duration-500">
     <div id="root"></div>
+
+    <!-- 🚀 React Entrypoint -->
   </body>
 </html>
