@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MessageCircle, Send, Bot, Check, X, ExternalLink, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -65,22 +65,47 @@ const getPlatformName = (platform: string) => {
 };
 
 const containerVariants = {
-  hidden: {},
+  hidden: { opacity: 0 },
   visible: {
+    opacity: 1,
     transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
+      staggerChildren: 0.2,
+      delayChildren: 0.3,
+      duration: 0.5,
+      ease: 'easeOut'
     },
   },
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 40, scale: 0.95 },
-  visible: { opacity: 1, y: 0, scale: 1 },
+  hidden: {
+    opacity: 0,
+    y: 50,
+    scale: 0.9
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.8,
+      ease: [0.25, 0.46, 0.45, 0.94],
+      type: 'spring',
+      stiffness: 100,
+      damping: 15
+    }
+  },
 };
 
 function BotCard({ bot }: { bot: BotData }) {
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   return (
     <motion.div
@@ -89,10 +114,15 @@ function BotCard({ bot }: { bot: BotData }) {
       whileHover={
         !isMobile
           ? {
-              scale: 1.03,
-              y: -4,
-              transition: { type: 'spring', stiffness: 200, damping: 15 },
-            }
+            scale: 1.03,
+            y: -4,
+            transition: {
+              type: 'spring',
+              stiffness: 200,
+              damping: 15,
+              duration: 0.3
+            },
+          }
           : undefined
       }
       whileTap={{
@@ -100,7 +130,6 @@ function BotCard({ bot }: { bot: BotData }) {
         y: 0,
         transition: { duration: 0.15 },
       }}
-      transition={{ duration: 0.6, ease: 'easeInOut' }}
       className="relative bg-white/70 dark:bg-[#2a243a] border border-[#e2d9fb] dark:border-[#6c4ab6] rounded-2xl p-6 shadow-xl backdrop-blur-md text-gray-900 dark:text-[#e6e0f9] hover:shadow-[0_0_25px_4px_rgba(204,153,255,0.3)] hover:border-[#d5bdfc] transition-colors duration-700"
     >
       <div className="absolute top-4 right-4">
@@ -124,11 +153,10 @@ function BotCard({ bot }: { bot: BotData }) {
       <p className="text-sm text-gray-700 dark:text-[#cbbbf9] mb-4">{bot.description}</p>
 
       <div
-        className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium ${
-          bot.status === 'Online'
-            ? 'bg-[#d5bdfc] text-gray-800'
-            : 'bg-red-100 text-red-800'
-        }`}
+        className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium ${bot.status === 'Online'
+          ? 'bg-[#d5bdfc] text-gray-800'
+          : 'bg-red-100 text-red-800'
+          }`}
       >
         <span className="w-2 h-2 rounded-full bg-white"></span>
         {bot.status}
@@ -136,7 +164,11 @@ function BotCard({ bot }: { bot: BotData }) {
 
       <button
         onClick={() => window.open(bot.link, '_blank', 'noopener,noreferrer')}
-        className="mt-4 w-full py-2.5 rounded-lg bg-[#d5bdfc] hover:bg-[#c9a9f5] text-gray-900 font-semibold transition transform hover:scale-105 flex items-center justify-center gap-2"
+        className="mt-4 w-full py-2.5 rounded-lg 
+             bg-[#d5bdfc] hover:bg-[#c9a9f5] 
+             text-gray-900
+             font-semibold transition-all duration-300 transform hover:scale-105 
+             flex items-center justify-center gap-2"
       >
         Chat Sekarang <ExternalLink className="w-4 h-4" />
       </button>
@@ -145,11 +177,19 @@ function BotCard({ bot }: { bot: BotData }) {
 }
 
 function App() {
-  // Gunakan useState sekali saja, langsung dari localStorage
-const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-  return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-});
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [isMounted, setIsMounted] = useState(false);
 
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = savedTheme as 'light' | 'dark' || (prefersDark ? 'dark' : 'light');
+
+    setTheme(initialTheme);
+    document.documentElement.classList.toggle('dark', initialTheme === 'dark');
+
+    setTimeout(() => setIsMounted(true), 300);
+  }, []);
 
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
@@ -158,8 +198,18 @@ const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     localStorage.setItem('theme', newTheme);
   };
 
+  if (!isMounted) {
+    return (
+      <div className="min-h-screen relative overflow-hidden font-sans bg-[#fbfaff] text-gray-900 dark:bg-gradient-to-br dark:from-[#181827] dark:to-[#1e1b29] dark:text-[#e6e0f9]">
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="w-8 h-8 border-4 border-[#d5bdfc] border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen relative overflow-hidden font-sans bg-[#fbfaff] text-gray-900 dark:bg-gradient-to-br dark:from-[#181827] dark:to-[#1e1b29] dark:text-[#e6e0f9] transition-colors duration-500">
+    <div className="min-h-screen relative overflow-hidden font-sans bg-gradient-to-b from-[#FBFAFF] to-[#f3edff] text-gray-900 dark:bg-gradient-to-br dark:from-[#1f1b2e] dark:to-[#2a2342] dark:text-[#e6e0f9] transition-colors duration-500">
       {/* Background glow */}
       <div className="absolute -top-40 -left-40 w-[400px] h-[400px] rounded-full bg-[#e0c3fc] opacity-30 blur-[300px] pointer-events-none z-0"></div>
       <div className="absolute top-0 right-0 w-[300px] h-[300px] rounded-full bg-[#8ec5fc] opacity-20 blur-[200px] pointer-events-none z-0"></div>
@@ -170,10 +220,21 @@ const [theme, setTheme] = useState<'light' | 'dark'>(() => {
         <motion.button
           aria-label="Toggle theme"
           onClick={toggleTheme}
-          className="bg-[#d5bdfc] hover:bg-[#c9a9f5] text-gray-900 dark:text-gray-800 p-2 rounded-full shadow-md transition"
-          whileHover={{ rotate: 10, scale: 1.05, boxShadow: '0px 0px 12px rgba(204,153,255,0.5)' }}
-          whileTap={{ rotate: -20, scale: 0.9 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          className="bg-[#d5bdfc] hover:bg-[#c9a9f5] text-gray-900 dark:text-gray-800 p-2 rounded-full shadow-md transition-colors duration-300"
+          whileHover={{
+            rotate: 10,
+            scale: 1.05,
+            boxShadow: '0px 0px 12px rgba(204,153,255,0.5)',
+            transition: { duration: 0.3 }
+          }}
+          whileTap={{
+            rotate: -20,
+            scale: 0.9,
+            transition: { duration: 0.15 }
+          }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.1, duration: 0.5 }}
         >
           <AnimatePresence mode="wait">
             {theme === 'dark' ? (
@@ -182,7 +243,7 @@ const [theme, setTheme] = useState<'light' | 'dark'>(() => {
                 initial={{ opacity: 0, rotate: -90, scale: 0.5 }}
                 animate={{ opacity: 1, rotate: 0, scale: 1 }}
                 exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.4, ease: 'easeInOut' }}
               >
                 <Sun className="w-5 h-5" />
               </motion.span>
@@ -192,7 +253,7 @@ const [theme, setTheme] = useState<'light' | 'dark'>(() => {
                 initial={{ opacity: 0, rotate: 90, scale: 0.5 }}
                 animate={{ opacity: 1, rotate: 0, scale: 1 }}
                 exit={{ opacity: 0, rotate: -90, scale: 0.5 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.4, ease: 'easeInOut' }}
               >
                 <Moon className="w-5 h-5" />
               </motion.span>
@@ -211,22 +272,22 @@ const [theme, setTheme] = useState<'light' | 'dark'>(() => {
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <motion.div
-          className="relative w-28 h-28 sm:w-32 sm:h-32 mx-auto mb-6 rounded-full overflow-hidden"
-          initial={{ scale: 0.5, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: 'spring', stiffness: 120, damping: 14, delay: 0.2 }}
-          style={{ filter: 'drop-shadow(0 0 16px #d5bdfcaa)' }}
-          whileHover={{
-            rotate: 3,
-            scale: 1.08,
-            transition: { type: 'spring', stiffness: 250, damping: 14 },
-          }}
-          whileTap={{
-            scale: 0.95,
-            rotate: -2,
-            transition: { duration: 0.15 },
-          }}
-        >
+            className="relative w-28 h-28 sm:w-32 sm:h-32 mx-auto mb-6 rounded-full overflow-hidden"
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 120, damping: 14, delay: 0.2 }}
+            style={{ filter: 'drop-shadow(0 0 16px #d5bdfcaa)' }}
+            whileHover={{
+              rotate: 3,
+              scale: 1.08,
+              transition: { type: 'spring', stiffness: 250, damping: 14 },
+            }}
+            whileTap={{
+              scale: 0.95,
+              rotate: -2,
+              transition: { duration: 0.15 },
+            }}
+          >
             <img
               src="https://ucarecdn.com/72e39c89-791c-4730-b05a-848110bc99d1/-/preview/300x300/"
               alt="Kinda"
@@ -265,25 +326,12 @@ const [theme, setTheme] = useState<'light' | 'dark'>(() => {
         </motion.main>
       </AnimatePresence>
 
-      {/* Bot Cards */}
-      <motion.main
-        key={theme}
-        className="max-w-6xl mx-auto px-4 pb-20 z-10 relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        {bots.map((bot) => (
-          <BotCard key={bot.id} bot={bot} />
-        ))}
-      </motion.main>
-
       {/* Footer */}
       <motion.footer
         className="text-center text-sm text-gray-600 dark:text-[#aaa1cc] pb-3 z-10 relative"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1.2, delay: 0.6 }}
+        transition={{ duration: 1, delay: 1.2 }}
       >
         <p>Made with ❤️ by Zaxerion</p>
       </motion.footer>

@@ -205,7 +205,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden font-sans bg-[#fbfaff] text-gray-900 dark:bg-gradient-to-br dark:from-[#181827] dark:to-[#1e1b29] dark:text-[#e6e0f9] transition-colors duration-500">
+    <div className="min-h-screen relative overflow-hidden font-sans bg-gradient-to-b from-[#FBFAFF] to-[#f3edff] text-gray-900 dark:bg-gradient-to-br dark:from-[#1f1b2e] dark:to-[#2a2342] dark:text-[#e6e0f9] transition-colors duration-500">
       {/* Background glow */}
       <div className="absolute -top-40 -left-40 w-[400px] h-[400px] rounded-full bg-[#e0c3fc] opacity-30 blur-[300px] pointer-events-none z-0"></div>
       <div className="absolute top-0 right-0 w-[300px] h-[300px] rounded-full bg-[#8ec5fc] opacity-20 blur-[200px] pointer-events-none z-0"></div>
