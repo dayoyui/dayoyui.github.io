@@ -16,7 +16,7 @@ const bots: BotData[] = [
     id: '1',
     name: 'Kinda WhatsApp Bot',
     platform: 'whatsapp',
-    status: 'Online',
+    status: 'Offline',
     description: '‎ ',
     link: 'https://api.whatsapp.com/send?phone=6285194718404&text=.menu',
   },
@@ -154,8 +154,8 @@ function BotCard({ bot }: { bot: BotData }) {
 
       <div
         className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium ${bot.status === 'Online'
-            ? 'bg-[#d5bdfc] text-gray-800'
-            : 'bg-red-100 text-red-800'
+          ? 'bg-[#d5bdfc] text-gray-800'
+          : 'bg-red-100 text-red-800'
           }`}
       >
         <span className="w-2 h-2 rounded-full bg-white"></span>
@@ -163,8 +163,17 @@ function BotCard({ bot }: { bot: BotData }) {
       </div>
 
       <button
-        onClick={() => window.open(bot.link, '_blank', 'noopener,noreferrer')}
-        className="mt-4 w-full py-2.5 rounded-lg bg-[#d5bdfc] hover:bg-[#c9a9f5] text-gray-900 font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
+        onClick={() => {
+          if (bot.status === 'Online' && bot.link) {
+            window.open(bot.link, '_blank', 'noopener,noreferrer');
+          }
+        }}
+        disabled={bot.status !== 'Online' || !bot.link}
+        className={`mt-4 w-full py-2.5 rounded-lg font-semibold transition-all duration-300 transform flex items-center justify-center gap-2
+    ${bot.status === 'Online' && bot.link
+            ? 'bg-[#d5bdfc] hover:bg-[#c9a9f5] text-gray-900 hover:scale-105 cursor-pointer'
+            : 'bg-[#ede7fa] text-[#bba8e6] dark:bg-[#3a3350] dark:text-[#a89ad6] cursor-not-allowed'
+          }`}
       >
         Chat Sekarang <ExternalLink className="w-4 h-4" />
       </button>
@@ -268,22 +277,22 @@ function App() {
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <motion.div
-          className="relative w-28 h-28 sm:w-32 sm:h-32 mx-auto mb-6 rounded-full overflow-hidden"
-          initial={{ scale: 0.5, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: 'spring', stiffness: 120, damping: 14, delay: 0.2 }}
-          style={{ filter: 'drop-shadow(0 0 16px #d5bdfcaa)' }}
-          whileHover={{
-            rotate: 3,
-            scale: 1.08,
-            transition: { type: 'spring', stiffness: 250, damping: 14 },
-          }}
-          whileTap={{
-            scale: 0.95,
-            rotate: -2,
-            transition: { duration: 0.15 },
-          }}
-        >
+            className="relative w-28 h-28 sm:w-32 sm:h-32 mx-auto mb-6 rounded-full overflow-hidden"
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 120, damping: 14, delay: 0.2 }}
+            style={{ filter: 'drop-shadow(0 0 16px #d5bdfcaa)' }}
+            whileHover={{
+              rotate: 3,
+              scale: 1.08,
+              transition: { type: 'spring', stiffness: 250, damping: 14 },
+            }}
+            whileTap={{
+              scale: 0.95,
+              rotate: -2,
+              transition: { duration: 0.15 },
+            }}
+          >
             <img
               src="https://ucarecdn.com/72e39c89-791c-4730-b05a-848110bc99d1/-/preview/300x300/"
               alt="Kinda"
