@@ -14,15 +14,15 @@ interface BotData {
 const bots: BotData[] = [
   {
     id: '1',
-    name: 'Kinda WhatsApp Bot',
+    name: 'Navie WhatsApp Bot',
     platform: 'whatsapp',
-    status: 'Offline',
+    status: 'Online',
     description: '‎ ',
-    link: 'https://api.whatsapp.com/send?phone=6285194718404&text=.menu',
+    link: 'https://chat.whatsapp.com/Fx62AohmN9iAijz4ZtmzwA?mode=hqrc',
   },
   {
     id: '2',
-    name: 'Kinda Discord Bot',
+    name: 'Navie Discord Bot',
     platform: 'discord',
     status: 'Online',
     description: '‎ ',
@@ -30,11 +30,11 @@ const bots: BotData[] = [
   },
   {
     id: '3',
-    name: 'Kinda Telegram Bot',
+    name: 'Navie Telegram Bot',
     platform: 'telegram',
     status: 'Online',
     description: '‎ ',
-    link: 'https://t.me/KindaToram_bot',
+    link: 'https://t.me/NavieToram_bot',
   },
 ];
 
@@ -295,7 +295,7 @@ function App() {
           >
             <img
               src="https://ucarecdn.com/72e39c89-791c-4730-b05a-848110bc99d1/-/preview/300x300/"
-              alt="Kinda"
+              alt="Navie"
               className="w-full h-full object-cover border-4 border-[#d5bdfc] rounded-full"
             />
           </motion.div>
@@ -305,7 +305,7 @@ function App() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8, ease: 'easeOut' }}
           >
-            Kinda
+            Navie
           </motion.h1>
           <motion.p
             className="text-base sm:text-lg text-gray-600 dark:text-[#aaa1cc] mt-2 max-w-sm sm:max-w-md mx-auto px-4"
@@ -313,8 +313,24 @@ function App() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 0.8, ease: 'easeOut' }}
           >
-            Your Toram Online Assistant 🌸
+            Your Toram Online Assistant{' '}
+
+            <motion.span
+              animate={{
+                y: [0, -8, 0],
+                rotate: [0, 10, 0],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 2,
+                ease: "easeInOut",
+              }}
+              className="inline-block"
+            >
+              🌸
+            </motion.span>
           </motion.p>
+
         </motion.header>
 
         {/* Bot Cards */}
