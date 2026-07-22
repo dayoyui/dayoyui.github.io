@@ -14,7 +14,7 @@ interface BotData {
 const bots: BotData[] = [
   {
     id: '1',
-    name: 'Navie WhatsApp Bot',
+    name: 'Kinda WhatsApp Bot',
     platform: 'whatsapp',
     status: 'Online',
     description: '‎ ',
@@ -22,7 +22,7 @@ const bots: BotData[] = [
   },
   {
     id: '2',
-    name: 'Navie Discord Bot',
+    name: 'Kinda Discord Bot',
     platform: 'discord',
     status: 'Online',
     description: '‎ ',
@@ -30,11 +30,11 @@ const bots: BotData[] = [
   },
   {
     id: '3',
-    name: 'Navie Telegram Bot',
+    name: 'Kinda Telegram Bot',
     platform: 'telegram',
     status: 'Online',
     description: '‎ ',
-    link: 'https://t.me/NavieToram_bot',
+    link: 'https://t.me/KindaToram_bot',
   },
 ];
 
@@ -295,7 +295,7 @@ function App() {
           >
             <img
               src="https://ucarecdn.com/72e39c89-791c-4730-b05a-848110bc99d1/-/preview/300x300/"
-              alt="Navie"
+              alt="Kinda"
               className="w-full h-full object-cover border-4 border-[#d5bdfc] rounded-full"
             />
           </motion.div>
@@ -305,7 +305,7 @@ function App() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8, ease: 'easeOut' }}
           >
-            Navie
+            Kinda
           </motion.h1>
           <motion.p
             className="text-base sm:text-lg text-gray-600 dark:text-[#aaa1cc] mt-2 max-w-sm sm:max-w-md mx-auto px-4"

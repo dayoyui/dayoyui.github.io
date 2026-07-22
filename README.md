@@ -1,5 +1,5 @@
-# navie
-landing page bot navie
+# kinda
+landing page bot kinda
 
 npm run build
 npm run deploy
